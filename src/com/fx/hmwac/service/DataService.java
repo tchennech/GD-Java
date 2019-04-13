@@ -14,7 +14,6 @@ import com.fx.hmwac.dao.DataMapper;
 import com.fx.hmwac.domain.DataLoadBean;
 import com.fx.hmwac.domain.PictureDetail;
 import com.fx.hmwac.util.CreateID;
-import com.fx.hmwac.util.SaveDatas;
 
 
 @Service
@@ -23,29 +22,21 @@ public class DataService {
 	@Resource
 	private DataMapper dataMapper;
 
-	public boolean SaveData(DataLoadBean dlb) throws Exception {
-		//保存图片
-		String path = "C:/myPictures/";
-		path += dlb.getFlodName();
+	public String SaveData(DataLoadBean dlb) throws Exception {
+		//生产id
+		CreateID ci= CreateID.singleCreateID;
+		dlb.setId(ci.madeID());
+		//生产文件夹名
+		String path = "E:\\myPictures\\";
+		path += dlb.getId();
+		path += "\\";
 		File dir = new File(path);
 		if(!dir.exists()) {
 			dir.mkdirs();
 		}
-		SaveDatas sd = SaveDatas.singleSaveDatas;
-		try {
-			for(PictureDetail pd : dlb.getFiles()) {
-				sd.downloadImage(pd.getUrl(), pd.getName(), path);
-			}
-		} catch (Exception e){
-			System.out.println(e);
-			throw new Exception(e);
-		}
 		
 		//数据库中保存信息
 		int status;
-		CreateID ci= CreateID.singleCreateID;
-		dlb.setId(ci.madeID());
-		dlb.setNum(dlb.getFiles().size());
 		dlb.setSaveTime(new Date());
 		dlb.setPath(path);
 		try {
@@ -58,7 +49,7 @@ public class DataService {
 		if (status == 0) {
 			throw new Exception("信息保存失败");
 		}
-		return true;
+		return path;
 	}
 
 }

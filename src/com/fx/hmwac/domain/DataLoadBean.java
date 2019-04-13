@@ -3,10 +3,11 @@ package com.fx.hmwac.domain;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class DataLoadBean {
 	private String id;
 	private String flodName;
-    private List<PictureDetail> files;
     private int num;
     private String path;
     private String author;
@@ -16,12 +17,6 @@ public class DataLoadBean {
 	}
 	public void setFlodName(String flodName) {
 		this.flodName = flodName;
-	}
-	public List<PictureDetail> getFiles() {
-		return files;
-	}
-	public void setFiles(List<PictureDetail> files) {
-		this.files = files;
 	}
 	public int getNum() {
 		return num;
@@ -55,7 +50,7 @@ public class DataLoadBean {
 	}
 	@Override
 	public String toString() {
-		return "DataLoadBean [id=" + id + ", flodName=" + flodName + ", files=" + files + ", num=" + num + ", path="
+		return "DataLoadBean [id=" + id + ", flodName=" + flodName + ", num=" + num + ", path="
 				+ path + ", author=" + author + ", saveTime=" + saveTime + "]";
 	}
 	
