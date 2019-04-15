@@ -130,4 +130,26 @@ public class DataController {
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}
+	
+	@RequestMapping(value = "getAllData", method = RequestMethod.POST, produces="text/html; charset=utf-8")
+	@ResponseBody
+	public String getAllData(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		String param = "";
+		JsonObject jsonMsg = new JsonObject();
+		List<DataLoadBean> result;
+		try {
+			result = dataService.getAllData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("datas", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
 }

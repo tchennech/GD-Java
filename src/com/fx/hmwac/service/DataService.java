@@ -27,7 +27,7 @@ public class DataService {
 		CreateID ci= CreateID.singleCreateID;
 		dlb.setId(ci.madeID());
 		//生产文件夹名
-		String path = "E:\\myPictures\\";
+		String path = "C:\\myPictures\\";
 		path += dlb.getId();
 		path += "\\";
 		File dir = new File(path);
@@ -50,6 +50,13 @@ public class DataService {
 			throw new Exception("信息保存失败");
 		}
 		return path;
+	}
+
+	public List<DataLoadBean> getAllData() throws Exception{
+		// TODO Auto-generated method stub
+		
+		List<DataLoadBean> result = dataMapper.getAllData();
+		return result;
 	}
 
 }

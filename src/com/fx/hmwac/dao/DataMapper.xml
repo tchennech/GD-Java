@@ -8,4 +8,11 @@
 		insert into picturelists(id, flodName, path, author, saveTime, num)
 		values(#{id}, #{flodName}, #{path}, #{author}, #{saveTime}, #{num});
 	</insert>
+	<select id="getAllData" resultType="DataLoadBean">
+		select * from picturelists;
+	</select>
+	<select id="selectById" parameterType="DataLoadBean" resultType="DataLoadBean">
+		select * from picturelists where
+		id=#{id};
+	</select>
 </mapper>
