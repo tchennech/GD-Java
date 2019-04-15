@@ -55,5 +55,5 @@ local.properties
 .worksheet
 
 .idea/
-
+build/
 Context.xml
