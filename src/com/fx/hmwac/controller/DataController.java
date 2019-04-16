@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fx.hmwac.domain.DataLoadBean;
+import com.fx.hmwac.domain.ModelBean;
 import com.fx.hmwac.service.DataService;
 import com.fx.hmwac.util.SaveDatas;
 import com.google.gson.Gson;
@@ -149,6 +150,34 @@ public class DataController {
 
 		jsonMsg.addProperty("status", 0);
 		jsonMsg.addProperty("datas", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
+	@RequestMapping(value = "deleteData", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteData(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		String param = "";
+		JsonObject jsonMsg = new JsonObject();
+		try {
+			param = changeEncode(request, response, DATA);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Gson gson = new Gson();
+		DataLoadBean dlb = gson.fromJson(param, DataLoadBean.class);
+		int result = 0;
+		try {
+			result = dataService.deleteDataById(dlb.getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("statu", (new Gson()).toJson(result).toString());
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}

@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fx.hmwac.domain.DataLoadBean;
 import com.fx.hmwac.domain.ModelBean;
+import com.fx.hmwac.domain.PredictBean;
 import com.fx.hmwac.domain.TrainModelBean;
 import com.fx.hmwac.service.ModelService;
 import com.fx.hmwac.util.SaveDatas;
@@ -100,6 +101,62 @@ public class ModelController {
 
 		jsonMsg.addProperty("status", 0);
 		jsonMsg.addProperty("datas", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
+	@RequestMapping(value = "predict", method = RequestMethod.POST)
+	@ResponseBody
+	public String predict(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		String param = "";
+		JsonObject jsonMsg = new JsonObject();
+		try {
+			param = changeEncode(request, response, DATA);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Gson gson = new Gson();
+		PredictBean pb = gson.fromJson(param, PredictBean.class);
+		int result = 0;
+		try {
+			result = modelService.predict(pb);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("statu", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
+	@RequestMapping(value = "deleteModel", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteModel(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		String param = "";
+		JsonObject jsonMsg = new JsonObject();
+		try {
+			param = changeEncode(request, response, DATA);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Gson gson = new Gson();
+		ModelBean mb = gson.fromJson(param, ModelBean.class);
+		int result = 0;
+		try {
+			result = modelService.deleteModelById(mb.getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("statu", (new Gson()).toJson(result).toString());
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}

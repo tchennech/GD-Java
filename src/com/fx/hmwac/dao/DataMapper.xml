@@ -9,10 +9,14 @@
 		values(#{id}, #{flodName}, #{path}, #{author}, #{saveTime}, #{num});
 	</insert>
 	<select id="getAllData" resultType="DataLoadBean">
-		select * from picturelists;
+		select * from picturelists where status=1;
 	</select>
 	<select id="getDataById" parameterType="DataLoadBean" resultType="DataLoadBean">
 		select * from picturelists where
-		id=#{id};
+		id=#{id} and status=1;
 	</select>
+	<update id="deleteDataById" parameterType="DataLoadBean">
+		update picturelists set status=0 where
+		id=#{id}
+	</update>
 </mapper>

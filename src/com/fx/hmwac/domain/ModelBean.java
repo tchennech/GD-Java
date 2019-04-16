@@ -1,9 +1,6 @@
 package com.fx.hmwac.domain;
 
 import java.util.Date;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class ModelBean {
 	private String id;
@@ -11,14 +8,34 @@ public class ModelBean {
 	private String dataId;
     private String author;
     private String saveTime;
-    private String dataName;
+    private Date dataName;
     private int trainAccuracy;
     private int testAccuracy;
     private int trainLoss;
     private int testLoss;
+    private String path;
     private int totalEpochs;
 	public String getId() {
 		return id;
+	}
+	public String getSaveTime() {
+		return saveTime;
+	}
+	public void setSaveTime(String saveTime) {
+		this.saveTime = saveTime;
+	}
+	
+	public Date getDataName() {
+		return dataName;
+	}
+	public void setDataName(Date dataName) {
+		this.dataName = dataName;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
 	public void setId(String id) {
 		this.id = id;
@@ -73,9 +90,10 @@ public class ModelBean {
 	}
 	@Override
 	public String toString() {
-		return "TrainModelBean [id=" + id + ", name=" + name + ", dataId=" + dataId + ", author=" + author
-				+ ", trainAccuracy=" + trainAccuracy + ", testAccuracy=" + testAccuracy + ", trainLoss=" + trainLoss
-				+ ", testLoss=" + testLoss + ", totalEpochs=" + totalEpochs + "]";
+		return "ModelBean [id=" + id + ", name=" + name + ", dataId=" + dataId + ", author=" + author + ", saveTime="
+				+ saveTime + ", dataName=" + dataName + ", trainAccuracy=" + trainAccuracy + ", testAccuracy="
+				+ testAccuracy + ", trainLoss=" + trainLoss + ", testLoss=" + testLoss + ", path=" + path
+				+ ", totalEpochs=" + totalEpochs + "]";
 	}
     
 }

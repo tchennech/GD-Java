@@ -1,9 +1,6 @@
 package com.fx.hmwac.domain;
 
 import java.util.Date;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
 
 public class DataLoadBean {
 	private String id;

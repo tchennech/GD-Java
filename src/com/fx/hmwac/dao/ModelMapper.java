@@ -12,8 +12,8 @@ public interface ModelMapper {
 
 	public List<ModelBean> getAllModels();
 
-//	public DataLoadBean selectById(DataLoadBean dlb);
-//
-//	public DataLoadBean getDataById(DataLoadBean dlb);
-
+	public ModelBean getModelById(ModelBean mb);
+	
+	public int deleteModelById(ModelBean mb);
+	
 }

@@ -16,4 +16,5 @@ public interface DataMapper {
 
 	public DataLoadBean getDataById(DataLoadBean dlb);
 
+	public int deleteDataById(DataLoadBean dlb);
 }

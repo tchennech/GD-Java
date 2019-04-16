@@ -1,10 +1,5 @@
 package com.fx.hmwac.domain;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
-
 public class TrainModelBean {
 
 	private String id;

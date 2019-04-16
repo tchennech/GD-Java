@@ -6,7 +6,14 @@
 <mapper namespace="com.fx.hmwac.dao.ModelMapper">
 
 	<select id="getAllModels" resultType="ModelBean">
-		select * from model;
+		select * from model where status=1;
 	</select>
-
+	<select id="getModelById" parameterType="ModelBean" resultType="ModelBean">
+		select * from model where
+		id=#{id} and status=1;
+	</select>
+	<update id="deleteModelById" parameterType="ModelBean">
+		update model set status=0 where
+		id=#{id}
+	</update>
 </mapper>

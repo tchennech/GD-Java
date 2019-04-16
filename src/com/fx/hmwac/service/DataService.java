@@ -63,4 +63,12 @@ public class DataService {
 		DataLoadBean result = dataMapper.getDataById(dlb);
 		return result;
 	}
+	
+	public int deleteDataById(String id) throws Exception{
+		// TODO Auto-generated method stub
+		DataLoadBean dlb = new DataLoadBean();
+		dlb.setId(id);
+		int result = dataMapper.deleteDataById(dlb);
+		return result;
+	}
 }
