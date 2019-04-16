@@ -14,4 +14,6 @@ public interface DataMapper {
 
 	public DataLoadBean selectById(DataLoadBean dlb);
 
+	public DataLoadBean getDataById(DataLoadBean dlb);
+
 }

@@ -58,5 +58,9 @@ public class DataService {
 		List<DataLoadBean> result = dataMapper.getAllData();
 		return result;
 	}
-
+	public DataLoadBean getDataById(DataLoadBean dlb) throws Exception{
+		// TODO Auto-generated method stub
+		DataLoadBean result = dataMapper.getDataById(dlb);
+		return result;
+	}
 }

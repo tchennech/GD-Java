@@ -11,7 +11,7 @@
 	<select id="getAllData" resultType="DataLoadBean">
 		select * from picturelists;
 	</select>
-	<select id="selectById" parameterType="DataLoadBean" resultType="DataLoadBean">
+	<select id="getDataById" parameterType="DataLoadBean" resultType="DataLoadBean">
 		select * from picturelists where
 		id=#{id};
 	</select>
