@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fx.hmwac.domain.DataLoadBean;
 import com.fx.hmwac.domain.ModelBean;
 import com.fx.hmwac.service.DataService;
+import com.fx.hmwac.util.CopyImgs;
 import com.fx.hmwac.util.SaveDatas;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -43,6 +44,7 @@ public class DataController {
 	private final String SET_ENCODE = "utf-8";
 	private final String SET_TEXTURE = "text/plain";
 	private final String DATA = "datal";
+	private final String PREPATH = "resource\\imgs\\";
 	SaveDatas sSaveDatas = SaveDatas.singleSaveDatas;
 
 	private String changeEncode(HttpServletRequest request, HttpServletResponse response, String paraName)
@@ -89,7 +91,7 @@ public class DataController {
 	public String upLoadImg(@RequestBody MultipartFile file, String path, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		JsonObject jsonMsg = new JsonObject();
-		path = path.substring(1,path.length()-1); 
+		path = path.substring(1, path.length() - 1);
 		System.out.println("上传图片是否为空：" + file.isEmpty());
 		System.out.println("路径：" + path);
 		if (file != null) {
@@ -131,8 +133,8 @@ public class DataController {
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}
-	
-	@RequestMapping(value = "getAllData", method = RequestMethod.POST, produces="text/html; charset=utf-8")
+
+	@RequestMapping(value = "getAllData", method = RequestMethod.POST, produces = "text/html; charset=utf-8")
 	@ResponseBody
 	public String getAllData(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 		String param = "";
@@ -153,6 +155,7 @@ public class DataController {
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}
+
 	@RequestMapping(value = "deleteData", method = RequestMethod.POST)
 	@ResponseBody
 	public String deleteData(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -178,6 +181,62 @@ public class DataController {
 		}
 		jsonMsg.addProperty("status", 0);
 		jsonMsg.addProperty("statu", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
+
+	@RequestMapping("/getImgs")
+	@ResponseBody
+	public String getImgs(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+			throws Exception {
+		String param = "";
+		JsonObject jsonMsg = new JsonObject();
+		try {
+			param = changeEncode(request, response, DATA);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Gson gson = new Gson();
+		DataLoadBean dlb = gson.fromJson(param, DataLoadBean.class);
+		DataLoadBean result;
+		try {
+			result = dataService.getDataById(dlb);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+		// 获取文件列表
+		String originPath = result.getPath();
+		File dir = new File(originPath);
+		String[] files = dir.list();
+		// 创建文件夹 PREPATH
+		String resultPath = PREPATH + (result.getId() + "\\");
+		String path = request.getSession().getServletContext().getRealPath(PREPATH);
+		path += ("\\" + result.getId());
+		File dirPath = new File(path);
+		path += "\\";
+		if (!dirPath.exists() && !dirPath.isDirectory()) {
+			System.out.println("目录不存在，创建目录：" + dirPath);
+			dirPath.mkdir();
+		}
+		// 拷贝文件
+		CopyImgs ci = CopyImgs.singCopyImgs;
+		try {
+			ci.copyFiles(originPath, path, files);
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("path", (new Gson()).toJson(resultPath).toString());
+		jsonMsg.addProperty("files", (new Gson()).toJson(files).toString());
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}
