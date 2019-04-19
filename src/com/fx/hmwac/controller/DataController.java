@@ -215,7 +215,9 @@ public class DataController {
 		String[] files = dir.list();
 		// 创建文件夹 PREPATH
 		String resultPath = PREPATH + (result.getId() + "\\");
-		String path = request.getSession().getServletContext().getRealPath(PREPATH);
+		String path = request.getSession().getServletContext().getRealPath("/");
+		System.out.println(path);
+		path += "\\"+PREPATH;
 		path += ("\\" + result.getId());
 		File dirPath = new File(path);
 		path += "\\";
