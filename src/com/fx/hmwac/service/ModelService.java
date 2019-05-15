@@ -3,7 +3,9 @@ package com.fx.hmwac.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,6 +19,7 @@ import com.fx.hmwac.domain.PredictBean;
 import com.fx.hmwac.domain.PredictResultBean;
 import com.fx.hmwac.domain.SingleResultBean;
 import com.fx.hmwac.domain.TrainModelBean;
+import com.fx.hmwac.util.CallPython;
 import com.fx.hmwac.util.CreateID;
 
 
@@ -25,6 +28,7 @@ import com.fx.hmwac.util.CreateID;
 public class ModelService {
 	final String detectorImgsPath = "C:\\detectorImgs\\";
 	final String resultImgsPath = "C:\\resultImgs\\";
+	private final CallPython cpy = CallPython.singleCallPython;
 	CreateID ci= CreateID.singleCreateID;
 	@Resource
 	private ModelMapper modelMapper;
@@ -77,32 +81,37 @@ public class ModelService {
 		System.out.println(dlb);
 		System.out.println(mb);
 		PredictResultBean result = new PredictResultBean();
-		//固定id测试用
-		//String id = ci.madeID();
-		String id = "testid";
+		//id生成
+		String id = ci.madeID();
+		//检测结果
+		List<String> dr = cpy.callPy(0, dlb.getId(), id);
+		//分类结果
+		List<String> cr = cpy.callPy(1, dlb.getId(), id);
+		//结果保存
 		result.setId(id);
 		result.setDetectorPath(detectorImgsPath + id+"\\");
 		result.setResultPath(resultImgsPath+ id +"\\");
-		//检测部分
-		//移动检测结果
-		//设置检测结果
-		List<SingleResultBean> sr = new ArrayList<SingleResultBean>();
-		String[] ids = {"102_3F325691-A609-4354-A4AC-960A1D463749_26.jpg",
-				"102_3F325691-A609-4354-A4AC-960A1D463749_32.jpg",
-				"102_3F325691-A609-4354-A4AC-960A1D463749_42.jpg"};
-		int[][] nums = {{0, 22, 0, 0, 0, 0, 0, 0},
-				{0, 37, 0, 0, 0, 0, 0, 0},
-				{0, 25, 0, 0, 0, 0, 0, 0}};
-		for(int i=0; i<3; i++) {
-			int num = 0;
-			for(int j=0; j<8; j++) {
-				num += nums[i][j];
+		
+		Map<String, SingleResultBean> setResult = new HashMap<>();
+		for(String line : dr) {
+			String[] li = line.split(" ");
+			System.out.println(li);
+			setResult.put(li[1], new SingleResultBean(li[1], Integer.parseInt(li[2])));
+		}
+		for(String line : cr) {
+			int[] num = {0, 0, 0, 0, 0, 0, 0, 0};
+			String[] li = line.split(" ");
+			for(int i=0; i<8; i++) {
+				num[i] = Integer.parseInt(li[i+2]);
 			}
-			sr.add(new SingleResultBean(ids[i], nums[i], num));
+			setResult.put(li[1], new SingleResultBean(li[1], num, setResult.get(li[1]).getNum()));
+		}
+		//设置结果
+		List<SingleResultBean> sr = new ArrayList<SingleResultBean>();
+		for(Map.Entry<String, SingleResultBean> mm : setResult.entrySet()) {
+			sr.add(mm.getValue());
 		}
 		result.setPictures(sr);
-		//分类部分
-		//结果保存
 		return result;
 	}
 	public int deleteModelById(String id) throws Exception{

@@ -54,7 +54,8 @@ public class JavaCounter {
                 if (s.isDirectory()) {
                     continue;
                 }
-                if(s.getName().lastIndexOf(".java")>0||s.getName().lastIndexOf(".jsp")>0||s.getName().lastIndexOf(".js")>0||s.getName().lastIndexOf(".css")>0)
+                if(s.getName().lastIndexOf(".java")>0||s.getName().lastIndexOf(".jsp")>0||s.getName().lastIndexOf(".js")>0||s.getName().lastIndexOf(".css")>0||s.getName().lastIndexOf(".xml")>0)
+                //if(s.getName().lastIndexOf(".py")>0)
                 {
                 	
                 }else{
@@ -102,6 +103,6 @@ public class JavaCounter {
         lc.counter("E:\\projects\\eclipse\\HMWC"); //$NON-NLS-1$
     }
 }
-//1011
+//1934
 //2475
 //3486

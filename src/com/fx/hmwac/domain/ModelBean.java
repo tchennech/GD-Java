@@ -7,8 +7,8 @@ public class ModelBean {
 	private String name;
 	private String dataId;
     private String author;
-    private String saveTime;
-    private Date dataName;
+    private String dataName;
+    private Date saveTime;
     private int trainAccuracy;
     private int testAccuracy;
     private int trainLoss;
@@ -18,17 +18,17 @@ public class ModelBean {
 	public String getId() {
 		return id;
 	}
-	public String getSaveTime() {
+	public Date getSaveTime() {
 		return saveTime;
 	}
-	public void setSaveTime(String saveTime) {
+	public void setSaveTime(Date saveTime) {
 		this.saveTime = saveTime;
 	}
 	
-	public Date getDataName() {
+	public String getDataName() {
 		return dataName;
 	}
-	public void setDataName(Date dataName) {
+	public void setDataName(String dataName) {
 		this.dataName = dataName;
 	}
 	public String getPath() {

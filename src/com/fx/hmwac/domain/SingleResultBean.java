@@ -18,6 +18,11 @@ public class SingleResultBean {
 		}
 		badNum = num-goodNum;
 	}
+	public SingleResultBean(String name, int num) {
+		super();
+		this.name = name;
+		this.num = num;
+	}
 	public String getName() {
 		return name;
 	}
@@ -29,6 +34,10 @@ public class SingleResultBean {
 	}
 	public void setTypeNum(int[] typeNum) {
 		this.typeNum = typeNum;
+		for(int i=0; i<4; i++) {
+			goodNum += typeNum[i];
+		}
+		badNum = num-goodNum;
 	}
 	public int getNum() {
 		return num;

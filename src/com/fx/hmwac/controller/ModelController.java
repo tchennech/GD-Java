@@ -154,6 +154,7 @@ public class ModelController {
 		makeDir(resultImgsPath);
 		File dir = new File(result.getDetectorPath());
 		String[] detectorFiles = dir.list();
+		System.out.println(result.getResultPath());
 		dir = new File(result.getResultPath());
 		String[] resultFiles = dir.list();
 		
