@@ -10,7 +10,9 @@ import java.util.List;
 public class CallPython {
 	private final String DETPATH = "E:\\projects\\graduatedesign\\SSD-Tensorflow-master\\notebooks\\predict2.py";
 	private final String CLAPATH = "E:\\projects\\graduatedesign\\graduateDesign\\main.py";
+	private final String XMLPYPATH = "E:\\projects\\graduatedesign\\graduateDesign\\readXml.py";
 	private final String IMGPATH = "C:\\myPictures\\";
+	private final String XMLPATH = "C:\\resultXml\\";
 	public static CallPython singleCallPython = new CallPython();
 
 	private CallPython() {
@@ -25,7 +27,10 @@ public class CallPython {
 			if (type == 0) {
 				file = DETPATH;
 				args1 = new String[] { "python3", file, IMGPATH + imgId + "\\", id };
-			} else {
+			} else if(type == -1){
+				file = XMLPYPATH;
+				args1 = new String[] { "python3", file, XMLPATH + id };
+			}else{
 				file = CLAPATH;
 				args1 = new String[] { "python3", file, "1", IMGPATH + imgId, id };
 			}

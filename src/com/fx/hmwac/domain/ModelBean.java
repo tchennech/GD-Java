@@ -9,10 +9,10 @@ public class ModelBean {
     private String author;
     private String dataName;
     private Date saveTime;
-    private int trainAccuracy;
-    private int testAccuracy;
-    private int trainLoss;
-    private int testLoss;
+    private double trainAccuracy;
+    private double testAccuracy;
+    private double trainLoss;
+    private double testLoss;
     private String path;
     private int totalEpochs;
 	public String getId() {
@@ -58,25 +58,25 @@ public class ModelBean {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public int getTrainAccuracy() {
+	public double getTrainAccuracy() {
 		return trainAccuracy;
 	}
-	public void setTrainAccuracy(int trainAccuracy) {
+	public void setTrainAccuracy(double trainAccuracy) {
 		this.trainAccuracy = trainAccuracy;
 	}
-	public int getTestAccuracy() {
+	public double getTestAccuracy() {
 		return testAccuracy;
 	}
-	public void setTestAccuracy(int testAccuracy) {
+	public void setTestAccuracy(double testAccuracy) {
 		this.testAccuracy = testAccuracy;
 	}
-	public int getTrainLoss() {
+	public double getTrainLoss() {
 		return trainLoss;
 	}
-	public void setTrainLoss(int trainLoss) {
+	public void setTrainLoss(double trainLoss) {
 		this.trainLoss = trainLoss;
 	}
-	public int getTestLoss() {
+	public double getTestLoss() {
 		return testLoss;
 	}
 	public void setTestLoss(int testLoss) {

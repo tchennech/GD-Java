@@ -13,10 +13,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.fx.hmwac.dao.ModelMapper;
+import com.fx.hmwac.dao.ResultMapper;
 import com.fx.hmwac.domain.DataLoadBean;
 import com.fx.hmwac.domain.ModelBean;
 import com.fx.hmwac.domain.PredictBean;
 import com.fx.hmwac.domain.PredictResultBean;
+import com.fx.hmwac.domain.ResultBean;
 import com.fx.hmwac.domain.SingleResultBean;
 import com.fx.hmwac.domain.TrainModelBean;
 import com.fx.hmwac.util.CallPython;
@@ -34,6 +36,8 @@ public class ModelService {
 	private ModelMapper modelMapper;
 	@Resource
 	private DataService dataService;
+	@Resource
+	private ResultMapper resultMapper;
 	public int trainModel(TrainModelBean tmb) throws Exception {
 		// 获取data数据
 		DataLoadBean dlbForm = new DataLoadBean();
@@ -91,7 +95,7 @@ public class ModelService {
 		result.setId(id);
 		result.setDetectorPath(detectorImgsPath + id+"\\");
 		result.setResultPath(resultImgsPath+ id +"\\");
-		
+		String xmlPath = "C:\\resultXml\\"+id+"\\";
 		Map<String, SingleResultBean> setResult = new HashMap<>();
 		for(String line : dr) {
 			String[] li = line.split(" ");
@@ -112,13 +116,48 @@ public class ModelService {
 			sr.add(mm.getValue());
 		}
 		result.setPictures(sr);
+		
+		//添加到数据库
+		ResultBean rb = new ResultBean(id, dlb.getId(), dlb.getFlodName(), result.getGoodNum(), result.getBadNum(), result.getResultPath(),
+				xmlPath, result.getDetectorPath(), "tchennech", new Date(), mb.getName(), mb.getId());
+		resultMapper.addResult(rb);
+		
 		return result;
 	}
+	
+	public List<ResultBean> getAllResults() {
+		// TODO Auto-generated method stub
+		List<ResultBean> result = resultMapper.getAllResults();
+		return result;
+	}
+	
 	public int deleteModelById(String id) throws Exception{
 		// TODO Auto-generated method stub
 		ModelBean mb = new ModelBean();
 		mb.setId(id);
 		int result = modelMapper.deleteModelById(mb);
+		return result;
+	}
+	public PredictResultBean getResultById(ResultBean rb) {
+		// TODO Auto-generated method stub
+		ResultBean trb = resultMapper.getResultById(rb);
+		PredictResultBean result = new PredictResultBean();
+		result.setDetectorPath(trb.getDetectorPath());
+		result.setId(trb.getId());
+		result.setResultPath(trb.getImgPath());
+		List<String> xmlr = cpy.callPy(-1, "0", trb.getId());
+		List<SingleResultBean> setResult = new ArrayList<>();
+		for(String line : xmlr) {
+			int[] num = {0, 0, 0, 0, 0, 0, 0, 0};
+			String[] li = line.split(" ");
+			int totalNum = 0;
+			for(int i=0; i<8; i++) {
+				num[i] = Integer.parseInt(li[i+2]);
+				totalNum += num[i];
+			}
+			setResult.add(new SingleResultBean(li[1], num, totalNum));
+		}
+		result.setPictures(setResult);
 		return result;
 	}
 

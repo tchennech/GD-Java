@@ -18,6 +18,23 @@ public class SingleResultBean {
 		}
 		badNum = num-goodNum;
 	}
+	
+	public int getBadNum() {
+		return badNum;
+	}
+
+	public void setBadNum(int badNum) {
+		this.badNum = badNum;
+	}
+
+	public int getGoodNum() {
+		return goodNum;
+	}
+
+	public void setGoodNum(int goodNum) {
+		this.goodNum = goodNum;
+	}
+
 	public SingleResultBean(String name, int num) {
 		super();
 		this.name = name;
@@ -47,7 +64,8 @@ public class SingleResultBean {
 	}
 	@Override
 	public String toString() {
-		return "SingleResultBean [name=" + name + ", typeNum=" + Arrays.toString(typeNum) + ", num=" + num + "]";
+		return "SingleResultBean [name=" + name + ", typeNum=" + Arrays.toString(typeNum) + ", num=" + num + ", badNum="
+				+ badNum + ", goodNum=" + goodNum + "]";
 	}
 	
 	

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3.dtd">
+
+<mapper namespace="com.fx.hmwac.dao.ResultMapper">
+
+	<select id="getAllResults" resultType="ResultBean">
+		select * from result where status=1;
+	</select>
+	<select id="getResultById" parameterType="ResultBean" resultType="ResultBean">
+		select * from result where status=1 and id=#{id};
+	</select>
+
+	<insert id="addResult" parameterType="ResultBean">
+		insert into result(id, dataId, dataName, goodNum, badNum, imgPath, xmlPath, detectorPath, author, saveTime, modelName, modelId)
+		values(#{id}, #{dataId}, #{dataName}, #{goodNum}, #{badNum}, #{imgPath}, #{xmlPath}, #{detectorPath}, #{author}, #{saveTime}, #{modelName}, #{modelId});
+	</insert>
+	
+</mapper>

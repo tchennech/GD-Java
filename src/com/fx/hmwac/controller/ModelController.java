@@ -33,6 +33,7 @@ import com.fx.hmwac.domain.DataLoadBean;
 import com.fx.hmwac.domain.ModelBean;
 import com.fx.hmwac.domain.PredictBean;
 import com.fx.hmwac.domain.PredictResultBean;
+import com.fx.hmwac.domain.ResultBean;
 import com.fx.hmwac.domain.TrainModelBean;
 import com.fx.hmwac.service.ModelService;
 import com.fx.hmwac.util.CopyImgs;
@@ -148,8 +149,8 @@ public class ModelController {
 		path += "\\" + PREPATH;
 		String detectorImgsPath = path + "\\" + "detectorImgs";
 		String resultImgsPath = path + "\\" + "resultImgs";
-		detectorImgsPath += ("\\" + result.getId()+"\\");
-		resultImgsPath += ("\\" + result.getId()+"\\");
+		detectorImgsPath += ("\\" + result.getId() + "\\");
+		resultImgsPath += ("\\" + result.getId() + "\\");
 		makeDir(detectorImgsPath);
 		makeDir(resultImgsPath);
 		File dir = new File(result.getDetectorPath());
@@ -157,7 +158,7 @@ public class ModelController {
 		System.out.println(result.getResultPath());
 		dir = new File(result.getResultPath());
 		String[] resultFiles = dir.list();
-		
+
 		// 拷贝文件
 		CopyImgs ci = CopyImgs.singCopyImgs;
 		try {
@@ -169,10 +170,90 @@ public class ModelController {
 			jsonMsg.addProperty("msg", e.getMessage());
 			return jsonMsg.toString();
 		}
-		result.setDetectorPath(PREPATH+"detectorImgs\\"+result.getId()+"\\");
-		result.setResultPath(PREPATH+"resultImgs\\"+result.getId()+"\\");
+		result.setDetectorPath(PREPATH + "detectorImgs\\" + result.getId() + "\\");
+		result.setResultPath(PREPATH + "resultImgs\\" + result.getId() + "\\");
 		jsonMsg.addProperty("status", 0);
 		jsonMsg.addProperty("result", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
+
+	@RequestMapping(value = "getAllResults", method = RequestMethod.POST, produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public String getAllResults(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		JsonObject jsonMsg = new JsonObject();
+		List<ResultBean> result;
+		try {
+			result = modelService.getAllResults();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("datas", (new Gson()).toJson(result).toString());
+		System.out.println(jsonMsg.toString());
+		return jsonMsg.toString();
+	}
+
+	@RequestMapping(value = "getResultById", method = RequestMethod.POST, produces = "text/html; charset=utf-8")
+	@ResponseBody
+	public String getResultById(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		JsonObject jsonMsg = new JsonObject();
+		String param = "";
+		try {
+			param = changeEncode(request, response, DATA);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Gson gson = new Gson();
+		ResultBean rb = gson.fromJson(param, ResultBean.class);
+		PredictResultBean result;
+		try {
+			result = modelService.getResultById(rb);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+		// 创建文件夹 PREPATH
+		String resultPath = PREPATH + (result.getId() + "\\");
+		String path = request.getSession().getServletContext().getRealPath("/");
+		System.out.println(path);
+		path += "\\" + PREPATH;
+		String detectorImgsPath = path + "\\" + "detectorImgs";
+		String resultImgsPath = path + "\\" + "resultImgs";
+		detectorImgsPath += ("\\" + result.getId() + "\\");
+		resultImgsPath += ("\\" + result.getId() + "\\");
+		makeDir(detectorImgsPath);
+		makeDir(resultImgsPath);
+		File dir = new File(result.getDetectorPath());
+		String[] detectorFiles = dir.list();
+		System.out.println(result.getResultPath());
+		dir = new File(result.getResultPath());
+		String[] resultFiles = dir.list();
+
+		// 拷贝文件
+		CopyImgs ci = CopyImgs.singCopyImgs;
+		try {
+			ci.copyFiles(result.getDetectorPath(), detectorImgsPath, detectorFiles);
+			ci.copyFiles(result.getResultPath(), resultImgsPath, resultFiles);
+		} catch (Exception e) {
+			e.printStackTrace();
+			jsonMsg.addProperty("status", 1);
+			jsonMsg.addProperty("msg", e.getMessage());
+			return jsonMsg.toString();
+		}
+		result.setDetectorPath(PREPATH + "detectorImgs\\" + result.getId() + "\\");
+		result.setResultPath(PREPATH + "resultImgs\\" + result.getId() + "\\");
+		jsonMsg.addProperty("status", 0);
+		jsonMsg.addProperty("datas", (new Gson()).toJson(result).toString());
 		System.out.println(jsonMsg.toString());
 		return jsonMsg.toString();
 	}

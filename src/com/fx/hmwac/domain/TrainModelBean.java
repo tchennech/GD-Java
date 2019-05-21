@@ -7,10 +7,10 @@ public class TrainModelBean {
     private int imgSize1;
     private int imgSize2;
     private String author;
-    private int learnRate;
+    private double learnRate;
     private int batchSize;
     private int totalEpochs;
-    private int weightDecay;
+    private double weightDecay;
 	public String getId() {
 		return id;
 	}
@@ -41,10 +41,10 @@ public class TrainModelBean {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public int getLearnRate() {
+	public double getLearnRate() {
 		return learnRate;
 	}
-	public void setLearnRate(int learnRate) {
+	public void setLearnRate(double learnRate) {
 		this.learnRate = learnRate;
 	}
 	public int getBatchSize() {
@@ -59,10 +59,10 @@ public class TrainModelBean {
 	public void setTotalEpochs(int totalEpochs) {
 		this.totalEpochs = totalEpochs;
 	}
-	public int getWeightDecay() {
+	public double getWeightDecay() {
 		return weightDecay;
 	}
-	public void setWeightDecay(int weightDecay) {
+	public void setWeightDecay(double weightDecay) {
 		this.weightDecay = weightDecay;
 	}
 	@Override
